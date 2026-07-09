@@ -1,4 +1,4 @@
-import { CONTINENTES_VALIDOS, CONTINENTE_ES } from "@/lib/countries";
+import { CONTINENTES_VALIDOS, CONTINENTE_ES, CAPITAL_ES } from "@/lib/countries";
 import type { Country } from "@/lib/types";
 
 /**
@@ -38,9 +38,12 @@ function parsear(raw: unknown[]): Country[] {
     })
     .map((p) => {
       const code = typeof p.cca2 === "string" ? p.cca2.toLowerCase() : "";
+      const capEn = p.capital[0];
       return {
-        name: p.name.common,
-        capital: p.capital[0],
+        // Nombre del pais en espanol (fallback al ingles si no hay traduccion)
+        name: p.translations?.spa?.common ?? p.name.common,
+        // Capital traducida al espanol si existe exonimo consolidado
+        capital: CAPITAL_ES[capEn] ?? capEn,
         continent: CONTINENTE_ES[p.region] ?? p.region,
         flagUrl: code ? `https://flagcdn.com/${code}.svg` : "",
         flagEmoji: p.flag || "🏳️",
