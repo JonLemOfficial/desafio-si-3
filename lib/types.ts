@@ -13,17 +13,41 @@ export interface Country {
 export type QuestionType = "capital" | "continente";
 
 export interface Question {
-  country: Country;
+  id?: number;
+  country?: Country;
   type: QuestionType;
   correctAnswer: string;
+  prompt?: string;
 }
 
 export interface ScoreEntry {
   id: number;
+  usuario_id: number;
   nombre_usuario: string;
   puntaje: number;
   desafio_titulo: string;
   creado_en: string;
+}
+
+export interface TimelinePoint {
+  label: string;
+  value: number;
+}
+
+export interface DesafioMetrics {
+  total_participaciones: number;
+  participantes_unicos: number;
+  promedio_puntaje: number;
+  aprobados: number;
+  reprobados: number;
+  ultima_participacion: string | null;
+}
+
+export interface DesafioResultadosData {
+  desafio: Desafio;
+  metrics: DesafioMetrics;
+  entries: ScoreEntry[];
+  timeline: TimelinePoint[];
 }
 
 // ---- Auth ----
@@ -58,6 +82,14 @@ export interface Desafio {
   profesor_id: number;
   profesor_nombre?: string;
   creado_en: string;
+  autogen?: boolean; // true = preguntas generadas automaticamente, false = preguntas personalizadas
+  preguntas_json?: string;
+  total_participaciones?: number;
+  participantes_unicos?: number;
+  promedio_puntaje?: number;
+  aprobados?: number;
+  reprobados?: number;
+  ultima_participacion?: string;
 }
 
 export type GameState = "lobby" | "playing" | "gameover";

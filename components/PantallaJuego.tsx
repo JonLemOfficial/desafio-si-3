@@ -12,6 +12,13 @@ interface Props {
   onGameOver: (puntaje: number) => void;
 }
 
+interface PreguntaManual {
+  id?: number;
+  type?: QuestionType;
+  pregunta?: string;
+  respuesta?: string;
+}
+
 // Pre-genera toda la cola de preguntas de una sola vez sin estado intermedio
 function generarCola(paises: Country[], numPreguntas: number): Question[] {
   const shuffled = [...paises].sort(() => Math.random() - 0.5);
@@ -26,14 +33,38 @@ function generarCola(paises: Country[], numPreguntas: number): Question[] {
   });
 }
 
+function generarColaManual(desafio: Desafio): Question[] {
+  if (!desafio.preguntas_json) return [];
+
+  try {
+    const preguntas = JSON.parse(desafio.preguntas_json) as PreguntaManual[];
+    return preguntas
+      .filter((item) => item?.pregunta?.trim() && item?.respuesta?.trim())
+      .slice(0, desafio.num_preguntas)
+      .map((item, index) => ({
+        id: item.id ?? index,
+        type: item.type === "continente" ? "continente" : "capital",
+        correctAnswer: item.respuesta!.trim(),
+        prompt: item.pregunta!.trim(),
+      }));
+  } catch (error) {
+    console.error("[PantallaJuego] No se pudieron parsear las preguntas manuales", error);
+    return [];
+  }
+}
+
 function normalizar(texto: string): string {
   return texto.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 }
 
 export default function PantallaJuego({ paises, desafio, nombreJugador, onGameOver }: Props) {
   // Cola completa generada una sola vez al montar — sin efectos ni setState async
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const cola = useMemo(() => generarCola(paises, desafio.num_preguntas), []);
+  const cola = useMemo(() => {
+    if (desafio.autogen === false) {
+      return generarColaManual(desafio);
+    }
+    return generarCola(paises, desafio.num_preguntas);
+  }, [desafio, paises]);
 
   const [indice, setIndice]     = useState(0);
   const [puntaje, setPuntaje]   = useState(0);
@@ -98,16 +129,19 @@ export default function PantallaJuego({ paises, desafio, nombreJugador, onGameOv
     }
   }
 
-  const textosPregunta: Record<QuestionType, string> = {
-    capital:    `Capital de ${pregunta.country.name}`,
-    continente: `Continente de ${pregunta.country.name}`,
-  };
+  const textoPregunta = pregunta.prompt
+    ? pregunta.prompt
+    : pregunta.country
+      ? pregunta.type === "capital"
+        ? `Capital de ${pregunta.country.name}`
+        : `Continente de ${pregunta.country.name}`
+      : "Responde a la pregunta";
 
-  const progreso = (indice / desafio.num_preguntas) * 100;
+  const progreso = (indice / Math.max(desafio.num_preguntas, 1)) * 100;
 
   return (
     <motion.div
-      key={pregunta.country.name}
+      key={pregunta.country?.name ?? pregunta.id ?? indice}
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       className="flex flex-col gap-5 w-full max-w-md"
@@ -148,32 +182,40 @@ export default function PantallaJuego({ paises, desafio, nombreJugador, onGameOv
 
       {/* Tarjeta del pais */}
       <div className="bg-slate-800/80 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center gap-4 shadow-xl">
-        <motion.div
-          key={pregunta.country.flagUrl}
-          initial={{ rotateY: 90, opacity: 0 }}
-          animate={{ rotateY: 0, opacity: 1 }}
-          transition={{ duration: 0.35 }}
-          className="w-36 h-24 rounded-lg overflow-hidden border border-slate-600 shadow-lg"
-        >
-          {pregunta.country.flagUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={pregunta.country.flagUrl}
-              alt={`Bandera de ${pregunta.country.name}`}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-4xl bg-slate-700">
-              {pregunta.country.flagEmoji}
-            </div>
-          )}
-        </motion.div>
+        {pregunta.country ? (
+          <motion.div
+            key={pregunta.country.flagUrl}
+            initial={{ rotateY: 90, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            transition={{ duration: 0.35 }}
+            className="w-36 h-24 rounded-lg overflow-hidden border border-slate-600 shadow-lg"
+          >
+            {pregunta.country.flagUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={pregunta.country.flagUrl}
+                alt={`Bandera de ${pregunta.country.name}`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-4xl bg-slate-700">
+                {pregunta.country.flagEmoji}
+              </div>
+            )}
+          </motion.div>
+        ) : (
+          <div className="w-36 h-24 rounded-lg border border-dashed border-slate-600 bg-slate-700/70 flex items-center justify-center text-4xl">
+            ❓
+          </div>
+        )}
 
-        <h2 className="text-2xl font-bold text-white">{pregunta.country.name}</h2>
+        <h2 className="text-2xl font-bold text-white">
+          {pregunta.country ? pregunta.country.name : "Pregunta personalizada"}
+        </h2>
 
         <div className="flex items-center gap-2 text-cyan-400">
           <HelpCircle className="w-4 h-4 shrink-0" />
-          <p className="font-medium text-center">{textosPregunta[pregunta.type]}</p>
+          <p className="font-medium text-center">{textoPregunta}</p>
         </div>
       </div>
 

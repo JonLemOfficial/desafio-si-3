@@ -12,6 +12,12 @@ const FLASH_MESSAGES: Record<string, { text: string; type: "success" | "info" }>
   created:    { text: "¡Desafio creado con exito!", type: "success" },
   updated:    { text: "Desafio actualizado correctamente.", type: "success" },
   deleted:    { text: "Desafio eliminado.", type: "info" },
+  challengeCreate:    { text: "Desafio creado con exito!", type: "success" },
+  challengeUpdate:    { text: "Desafio actualizado con exito!", type: "success" },
+  challengeDelete:    { text: "Desafio eliminado.", type: "info" },
+  questionsCreate:    { text: "Preguntas creadas con exito!", type: "success" },
+  questionsUpdate:    { text: "Preguntas actualizadas con exito!", type: "success" },
+  questionsDelete:    { text: "Preguntas eliminadas.", type: "info" },
 };
 
 type Toast = { id: number; text: string; type: "success" | "info" };

@@ -4,14 +4,35 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
-  BookOpen, Plus, Pencil, Trash2, Globe2,
-  Map, Hash, Heart, ChevronRight, LogOut,
-  ToggleLeft, ToggleRight, Users, Trophy
+  BookOpen,
+  Plus,
+  Pencil,
+  Trash2,
+  Globe2,
+  Map,
+  Hash,
+  Heart,
+  ChevronRight,
+  LogOut,
+  ToggleLeft,
+  ToggleRight,
+  Users,
+  Trophy,
+  ChartNoAxesCombined,
+  UsersRound
 } from "lucide-react";
+
 import { cerrarSesion, eliminarDesafio } from "@/lib/actions";
 import type { Desafio, SessionPayload } from "@/lib/types";
 
-const CONTINENTES = ["Africa","America","Asia","Europa","Oceania","Antartica"];
+const CONTINENTES = [
+  "Africa",
+  "America",
+  "Asia",
+  "Europa",
+  "Oceania",
+  "Antartica"
+];
 
 interface Props {
   desafios: Desafio[];
@@ -21,6 +42,23 @@ interface Props {
 export default function ProfesorDashboard({ desafios, sesion }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "activo" | "inactivo">("all");
+
+  const filteredDesafios = desafios.filter((d) => {
+    const matchesSearch = [d.titulo, d.descripcion, d.continente ?? ""]
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" ? true : statusFilter === "activo" ? d.activo : !d.activo;
+    return matchesSearch && matchesStatus;
+  });
+
+  const totalParticipaciones = desafios.reduce((sum, d) => sum + (d.total_participaciones ?? 0), 0);
+  const totalParticipantes = desafios.reduce((sum, d) => sum + (d.participantes_unicos ?? 0), 0);
+  const totalAprobados = desafios.reduce((sum, d) => sum + (d.aprobados ?? 0), 0);
+  const totalReprobados = desafios.reduce((sum, d) => sum + (d.reprobados ?? 0), 0);
 
   async function handleDelete(id: number) {
     setDeleting(true);
@@ -60,9 +98,12 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
         {/* Stats rápidas */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           {[
-            { label: "Desafios creados", value: desafios.length,                    icon: BookOpen, color: "emerald" },
-            { label: "Activos",          value: desafios.filter(d => d.activo).length, icon: ToggleRight, color: "cyan" },
-            { label: "Inactivos",        value: desafios.filter(d => !d.activo).length, icon: ToggleLeft, color: "slate" },
+            { label: "Desafios creados", value: desafios.length, icon: BookOpen, color: "emerald" },
+            { label: "Desafios inactivos", value: `${desafios.filter((d) => !d.activo).length} / ${desafios.length}`, icon: ToggleLeft, color: "slate" },
+            { label: "Participaciones", value: totalParticipaciones, icon: Users, color: "cyan" },
+            { label: "Participantes únicos", value: totalParticipantes, icon: Trophy, color: "amber" },
+            { label: "Aprobados", value: totalAprobados, icon: ChartNoAxesCombined, color: "emerald" },
+            { label: "Reprobados", value: totalReprobados, icon: Trash2, color: "red" },
           ].map((stat) => (
             <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
               <stat.icon className={`w-5 h-5 text-${stat.color}-400 mb-2`} />
@@ -75,13 +116,31 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
         {/* Titulo y boton nuevo */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-white font-bold text-lg">Mis Desafios</h2>
-          <Link
-            href="/profesor/nuevo"
-            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold rounded-xl px-4 py-2.5 text-sm transition-all shadow-lg shadow-emerald-500/20"
-          >
-            <Plus className="w-4 h-4" />
-            Nuevo Desafio
-          </Link>
+          <div className="flex items-center gap-3 flex-wrap">
+            <input
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              type="text"
+              placeholder="Buscar desafio, descripción..."
+              className="min-w-[220px] bg-slate-800 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-2 text-white outline-none transition-colors"
+            />
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value as "all" | "activo" | "inactivo")}
+              className="cursor-pointer p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            >
+              <option value="all">Todos</option>
+              <option value="activo">Activos</option>
+              <option value="inactivo">Inactivos</option>
+            </select>
+            <Link
+              href="/profesor/nuevo"
+              className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold rounded-xl px-4 py-2.5 text-sm transition-all shadow-lg shadow-emerald-500/20"
+            >
+              <Plus className="w-4 h-4" />
+              Nuevo Desafio
+            </Link>
+          </div>
         </div>
 
         {/* Lista de desafios */}
@@ -102,9 +161,13 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
               Crear primer desafio
             </Link>
           </motion.div>
+        ) : filteredDesafios.length === 0 ? (
+          <div className="text-center py-16 bg-slate-900 border border-dashed border-slate-700 rounded-2xl text-slate-500">
+            No se encontraron desafíos con el filtro actual.
+          </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {desafios.map((d, i) => (
+            {filteredDesafios.map((d, i) => (
               <motion.div
                 key={d.id}
                 initial={{ opacity: 0, y: 16 }}
@@ -144,6 +207,25 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
                         <Heart className="w-3.5 h-3.5 text-red-500" />
                         {d.vidas} vidas
                       </span>
+                      <span className="flex items-center gap-1 text-cyan-300">
+                        <Users className="w-3.5 h-3.5" />
+                        {d.participantes_unicos ?? 0} participantes
+                      </span>
+                      <span className="flex items-center gap-1 text-yellow-500">
+                        <UsersRound className="w-3.5 h-3.5" />
+                        {d.total_participaciones ?? 0} participaciones
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-400">
+                      <span className="rounded-full border border-slate-700 px-2 py-1 bg-slate-950/50">
+                        Promedio {Math.round(d.promedio_puntaje ?? 0)} pts
+                      </span>
+                      <span className="rounded-full border border-slate-700 px-2 py-1 bg-slate-950/50">
+                        {d.aprobados ?? 0} aprobados
+                      </span>
+                      <span className="rounded-full border border-slate-700 px-2 py-1 bg-slate-950/50">
+                        {d.reprobados ?? 0} reprobados
+                      </span>
                     </div>
                   </div>
 
@@ -151,14 +233,21 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
                   <div className="flex items-center gap-2 shrink-0">
                     <Link
                       href={`/profesor/editar/${d.id}`}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                      className="cursor-pointer p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
                       title="Editar"
                     >
                       <Pencil className="w-4 h-4" />
                     </Link>
+                    <Link
+                      href={`/profesor/resultados/${d.id}`}
+                      className="cursor-pointer p-2 rounded-lg bg-slate-800 hover:bg-yellow-700 text-slate-400 hover:text-white transition-colors"
+                      title="Ver resultados y métricas"
+                    >
+                      <ChartNoAxesCombined className="w-4 h-4" />
+                    </Link>
                     <button
                       onClick={() => setConfirmDelete(d.id)}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-red-900/40 text-slate-400 hover:text-red-400 transition-colors"
+                      className="cursor-pointer p-2 rounded-lg bg-slate-800 hover:bg-red-900/40 text-slate-400 hover:text-red-400 transition-colors"
                       title="Eliminar"
                     >
                       <Trash2 className="w-4 h-4" />

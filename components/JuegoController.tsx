@@ -29,6 +29,15 @@ export default function JuegoController({ paises, desafios, sesion }: Props) {
   const [puntajeFinal, setPuntajeFinal]     = useState(0);
 
   function handleStart(desafio: Desafio) {
+    if ( !desafio ) {
+      console.error("[JuegoController] Desafio no válido");
+      return;
+    }
+
+    if ( !desafio.autogen ) {
+      
+    }
+
     let lista = !desafio.continente
       ? [...paises]
       : paises.filter(
