@@ -1,8 +1,8 @@
-# GeoDesafio — Geography Challenge
+# GeoDesafio — Juego de trivia sobre geografía universal
 
 A web-based geography quiz game where students answer questions about world capitals and continents, competing on per-challenge leaderboards. Teachers create and manage challenges through a dedicated dashboard.
 
-**Live demo:** https://desafio-geografia.vercel.app
+**Live demo:** <https://geodesafio.jonlem.com>
 
 ---
 
