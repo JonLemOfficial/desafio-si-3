@@ -8,14 +8,22 @@ export const metadata: Metadata = {
   description: "Juego educativo interactivo de geografia mundial",
 };
 
+// Se ejecuta en el <head> antes de pintar: aplica el tema guardado (o el del
+// sistema) para evitar el parpadeo de tema incorrecto (FOUC). Ver:
+// node_modules/next/dist/docs/01-app/02-guides/preventing-flash-before-hydration.md
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="dark">
-      <body className="min-h-screen bg-[#0a0f1a] text-white antialiased">
+    <html lang="es" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="min-h-screen bg-background text-text antialiased">
         {children}
         <Suspense>
           <FlashToast />

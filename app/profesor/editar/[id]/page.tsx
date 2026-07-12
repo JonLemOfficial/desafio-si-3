@@ -36,7 +36,7 @@ export default async function EditarDesafioPage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0f1a] p-6">
+    <main className="min-h-screen bg-background p-6">
       <div className="max-w-xl mx-auto">
         <DesafioForm modo="editar" desafio={desafio} />
       </div>

@@ -34,25 +34,25 @@ export default function AuthForms() {
       {/* Logo */}
       <div className="text-center mb-8">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-2xl shadow-emerald-500/30">
-          <Globe2 className="w-8 h-8 text-white" strokeWidth={1.5} />
+          <Globe2 className="w-8 h-8 text-text" strokeWidth={1.5} />
         </div>
         <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
           GeoDesafio
         </h1>
-        <p className="text-slate-500 text-sm mt-1">Plataforma educativa de geografia</p>
+        <p className="text-muted text-sm mt-1">Plataforma educativa de geografia</p>
       </div>
 
       {/* Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="bg-surface-2 border border-border rounded-2xl overflow-hidden shadow-2xl">
 
         {/* Tabs */}
-        <div className="grid grid-cols-2 border-b border-slate-800">
+        <div className="grid grid-cols-2 border-b border-border">
           {(["login", "register"] as const).map((t) => (
             <button
               key={t}
               onClick={() => { setTab(t); setError(""); }}
               className={`py-4 text-sm font-semibold transition-colors relative ${
-                tab === t ? "text-white" : "text-slate-500 hover:text-slate-300"
+                tab === t ? "text-text" : "text-muted hover:text-muted"
               }`}
             >
               {t === "login" ? "Iniciar Sesion" : "Crear Cuenta"}
@@ -81,44 +81,44 @@ export default function AuthForms() {
               {/* Nombre (solo registro) */}
               {tab === "register" && (
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <input
                     name="nombre"
                     type="text"
                     placeholder="Tu nombre completo"
                     required
-                    className="w-full bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 outline-none transition-colors"
+                    className="w-full bg-surface border border-border focus:border-emerald-500 rounded-xl pl-10 pr-4 py-3 text-text placeholder-muted outline-none transition-colors"
                   />
                 </div>
               )}
 
               {/* Email */}
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   name="email"
                   type="email"
                   placeholder="correo@ejemplo.com"
                   required
-                  className="w-full bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 outline-none transition-colors"
+                  className="w-full bg-surface border border-border focus:border-emerald-500 rounded-xl pl-10 pr-4 py-3 text-text placeholder-muted outline-none transition-colors"
                 />
               </div>
 
               {/* Password */}
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   name="password"
                   type={showPass ? "text" : "password"}
                   placeholder="Contrasena"
                   required
                   minLength={6}
-                  className="w-full bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-xl pl-10 pr-10 py-3 text-white placeholder-slate-500 outline-none transition-colors"
+                  className="w-full bg-surface border border-border focus:border-emerald-500 rounded-xl pl-10 pr-10 py-3 text-text placeholder-muted outline-none transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted hover:text-muted"
                 >
                   {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -127,7 +127,7 @@ export default function AuthForms() {
               {/* Selector de rol (solo registro) */}
               {tab === "register" && (
                 <div>
-                  <p className="text-slate-400 text-sm mb-2 font-medium">Tipo de cuenta</p>
+                  <p className="text-muted text-sm mb-2 font-medium">Tipo de cuenta</p>
                   <div className="grid grid-cols-2 gap-3">
                     {[
                       { value: "estudiante", label: "Estudiante",  Icon: GraduationCap, desc: "Juega y compite" },
@@ -138,10 +138,10 @@ export default function AuthForms() {
                         className="cursor-pointer"
                       >
                         <input type="radio" name="rol" value={value} className="peer hidden" defaultChecked={value === "estudiante"} />
-                        <div className="border border-slate-700 peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 rounded-xl p-3 text-center transition-all">
-                          <Icon className="w-5 h-5 mx-auto mb-1 text-slate-400 peer-checked:text-emerald-400" />
-                          <p className="text-white text-sm font-semibold">{label}</p>
-                          <p className="text-slate-500 text-xs">{desc}</p>
+                        <div className="border border-border peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 rounded-xl p-3 text-center transition-all">
+                          <Icon className="w-5 h-5 mx-auto mb-1 text-muted peer-checked:text-emerald-400" />
+                          <p className="text-text text-sm font-semibold">{label}</p>
+                          <p className="text-muted text-xs">{desc}</p>
                         </div>
                       </label>
                     ))}
@@ -169,7 +169,7 @@ export default function AuthForms() {
                 disabled={loading}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold rounded-xl py-3.5 transition-all shadow-lg shadow-emerald-500/20"
+                className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 disabled:opacity-60 disabled:cursor-not-allowed text-text font-bold rounded-xl py-3.5 transition-all shadow-lg shadow-emerald-500/20"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -183,7 +183,7 @@ export default function AuthForms() {
         </div>
       </div>
 
-      <p className="text-center text-slate-600 text-xs mt-6">
+      <p className="text-center text-muted text-xs mt-6">
         Datos geograficos provistos por REST Countries API v3.1
       </p>
     </div>

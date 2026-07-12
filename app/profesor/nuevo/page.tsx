@@ -7,7 +7,7 @@ export default async function NuevoDesafioPage() {
   if (!sesion || sesion.rol !== "profesor") redirect("/auth");
 
   return (
-    <main className="min-h-screen bg-[#0a0f1a] p-6">
+    <main className="min-h-screen bg-background p-6">
       <div className="max-w-xl mx-auto">
         <DesafioForm modo="nuevo" />
       </div>

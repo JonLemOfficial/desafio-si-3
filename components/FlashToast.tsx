@@ -57,19 +57,19 @@ export default function FlashToast() {
             transition={{ duration: 0.2 }}
             className={`pointer-events-auto flex items-center gap-3 rounded-xl px-4 py-3 shadow-2xl border max-w-xs ${
               toast.type === "success"
-                ? "bg-slate-900 border-emerald-500/40 shadow-emerald-500/10"
-                : "bg-slate-900 border-slate-600/60 shadow-black/40"
+                ? "bg-surface-2 border-emerald-500/40 shadow-emerald-500/10"
+                : "bg-surface-2 border-border/60 shadow-black/40"
             }`}
           >
             {toast.type === "success" ? (
               <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
             ) : (
-              <Info className="w-5 h-5 text-slate-400 shrink-0" />
+              <Info className="w-5 h-5 text-muted shrink-0" />
             )}
-            <p className="text-white text-sm font-medium flex-1">{toast.text}</p>
+            <p className="text-text text-sm font-medium flex-1">{toast.text}</p>
             <button
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-              className="text-slate-500 hover:text-white transition-colors ml-1 shrink-0"
+              className="text-muted hover:text-text transition-colors ml-1 shrink-0"
             >
               <X className="w-4 h-4" />
             </button>

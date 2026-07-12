@@ -1,6 +1,7 @@
 import { obtenerSesion } from "@/lib/session";
 import { redirect } from "next/navigation";
 import AuthForms from "@/components/AuthForms";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default async function AuthPage() {
   // Si ya hay sesion activa, redirigimos al inicio
@@ -8,7 +9,11 @@ export default async function AuthPage() {
   if (sesion) redirect("/");
 
   return (
-    <main className="min-h-screen bg-[#0a0f1a] flex items-center justify-center p-6">
+    <main className="min-h-screen bg-background flex items-center justify-center p-6">
+      {/* Toggle de tema flotante (esta pantalla no tiene header) */}
+      <div className="fixed top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
       {/* Fondo decorativo */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />

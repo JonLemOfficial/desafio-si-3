@@ -42,9 +42,9 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
 
   function IconoPosicion({ pos }: { pos: number }) {
     if (pos === 1) return <Crown className="w-4 h-4 text-amber-400 fill-amber-400" />;
-    if (pos === 2) return <Medal className="w-4 h-4 text-slate-300" />;
+    if (pos === 2) return <Medal className="w-4 h-4 text-muted" />;
     if (pos === 3) return <Medal className="w-4 h-4 text-amber-700" />;
-    return <span className="text-slate-500 text-xs w-4 text-center">{pos}</span>;
+    return <span className="text-muted text-xs w-4 text-center">{pos}</span>;
   }
 
   return (
@@ -62,12 +62,12 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
           transition={{ delay: 0.2, duration: 0.6 }}
           className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-2xl shadow-amber-500/30"
         >
-          <Trophy className="w-10 h-10 text-white" />
+          <Trophy className="w-10 h-10 text-text" />
         </motion.div>
 
-        <h2 className="text-2xl font-bold text-white mb-1">Desafio Completado</h2>
-        <p className="text-slate-400 text-sm mb-1">{desafio.titulo}</p>
-        <p className="text-slate-500 text-sm mb-4">{nombreJugador}</p>
+        <h2 className="text-2xl font-bold text-text mb-1">Desafio Completado</h2>
+        <p className="text-muted text-sm mb-1">{desafio.titulo}</p>
+        <p className="text-muted text-sm mb-4">{nombreJugador}</p>
 
         <motion.div
           initial={{ scale: 0 }}
@@ -77,10 +77,10 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
         >
           <div className="flex items-center gap-2">
             <Star className="w-7 h-7 text-amber-400 fill-amber-400" />
-            <span className="text-5xl font-black text-white">{puntaje}</span>
+            <span className="text-5xl font-black text-text">{puntaje}</span>
             <span className="text-amber-400 font-bold self-end mb-1">/ {maxPuntos}</span>
           </div>
-          <div className="w-40 h-2 bg-slate-700 rounded-full overflow-hidden mt-1">
+          <div className="w-40 h-2 bg-border rounded-full overflow-hidden mt-1">
             <motion.div
               className="h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full"
               initial={{ width: 0 }}
@@ -92,7 +92,7 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
         </motion.div>
 
         {/* Info del desafio */}
-        <div className="flex justify-center gap-4 text-xs text-slate-500 mb-2">
+        <div className="flex justify-center gap-4 text-xs text-muted mb-2">
           <span className="flex items-center gap-1">
             <Map className="w-3 h-3" />{desafio.continente ?? "Global"}
           </span>
@@ -119,19 +119,19 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
       </div>
 
       {/* Leaderboard */}
-      <div className="w-full bg-slate-800/80 border border-slate-700/50 rounded-2xl overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-700/50">
+      <div className="w-full bg-surface/80 border border-border/50 rounded-2xl overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 border-b border-border/50">
           <Trophy className="w-4 h-4 text-amber-400" />
-          <h3 className="text-white font-bold text-sm">Top 10 - {desafio.titulo}</h3>
+          <h3 className="text-text font-bold text-sm">Top 10 - {desafio.titulo}</h3>
         </div>
 
         {guardando ? (
           <div className="flex items-center justify-center h-24 gap-3">
             <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-            <span className="text-slate-400 text-sm">Guardando puntaje...</span>
+            <span className="text-muted text-sm">Guardando puntaje...</span>
           </div>
         ) : clasificacion.length === 0 ? (
-          <div className="text-center py-6 text-slate-500 text-sm">
+          <div className="text-center py-6 text-muted text-sm">
             Se el primero en la clasificacion
           </div>
         ) : (
@@ -149,13 +149,13 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
                   <div className="w-5 flex items-center justify-center">
                     <IconoPosicion pos={index + 1} />
                   </div>
-                  <span className={`flex-1 text-sm font-medium truncate ${esMio ? "text-emerald-400" : "text-white"}`}>
+                  <span className={`flex-1 text-sm font-medium truncate ${esMio ? "text-emerald-400" : "text-text"}`}>
                     {entry.nombre_usuario}
                     {esMio && <span className="ml-1 text-xs text-emerald-600">(tu)</span>}
                   </span>
                   <div className="flex items-center gap-1">
                     <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                    <span className="font-bold text-white text-sm">{entry.puntaje}</span>
+                    <span className="font-bold text-text text-sm">{entry.puntaje}</span>
                   </div>
                 </motion.div>
               );
@@ -170,7 +170,7 @@ export default function PantallaGameOver({ nombreJugador, puntaje, desafio, onRe
           onClick={onReiniciar}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
+          className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-text font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
         >
           <RotateCcw className="w-4 h-4" />
           Elegir otro desafio

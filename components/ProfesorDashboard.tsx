@@ -9,6 +9,7 @@ import {
   ToggleLeft, ToggleRight, Users, Trophy
 } from "lucide-react";
 import { cerrarSesion, eliminarDesafio } from "@/lib/actions";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { Desafio, SessionPayload } from "@/lib/types";
 
 const CONTINENTES = ["Africa","America","Asia","Europa","Oceania","Antartica"];
@@ -30,23 +31,24 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0f1a]">
+    <div className="min-h-screen bg-background">
 
       {/* Header */}
-      <header className="border-b border-slate-800 px-6 py-4 flex items-center gap-3">
+      <header className="border-b border-border px-6 py-4 flex items-center gap-3">
         <Globe2 className="w-5 h-5 text-emerald-400" />
-        <span className="text-white font-bold">GeoDesafio</span>
+        <span className="text-text font-bold">GeoDesafio</span>
         <span className="bg-violet-500/20 text-violet-400 text-xs font-bold px-2 py-0.5 rounded-full border border-violet-500/30">
           PROFESOR
         </span>
         <div className="ml-auto flex items-center gap-4">
-          <span className="text-slate-400 text-sm hidden sm:block">
+          <ThemeToggle />
+          <span className="text-muted text-sm hidden sm:block">
             Hola, {sesion.nombre}
           </span>
           <form action={cerrarSesion}>
             <button
               type="submit"
-              className="flex items-center gap-1.5 text-slate-500 hover:text-red-400 text-sm transition-colors"
+              className="flex items-center gap-1.5 text-muted hover:text-red-400 text-sm transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Salir
@@ -64,20 +66,20 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
             { label: "Activos",          value: desafios.filter(d => d.activo).length, icon: ToggleRight, color: "cyan" },
             { label: "Inactivos",        value: desafios.filter(d => !d.activo).length, icon: ToggleLeft, color: "slate" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div key={stat.label} className="bg-surface-2 border border-border rounded-xl p-4">
               <stat.icon className={`w-5 h-5 text-${stat.color}-400 mb-2`} />
-              <p className="text-2xl font-black text-white">{stat.value}</p>
-              <p className="text-slate-500 text-xs">{stat.label}</p>
+              <p className="text-2xl font-black text-text">{stat.value}</p>
+              <p className="text-muted text-xs">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Titulo y boton nuevo */}
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-white font-bold text-lg">Mis Desafios</h2>
+          <h2 className="text-text font-bold text-lg">Mis Desafios</h2>
           <Link
             href="/profesor/nuevo"
-            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold rounded-xl px-4 py-2.5 text-sm transition-all shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-text font-bold rounded-xl px-4 py-2.5 text-sm transition-all shadow-lg shadow-emerald-500/20"
           >
             <Plus className="w-4 h-4" />
             Nuevo Desafio
@@ -89,14 +91,14 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16 bg-slate-900 border border-dashed border-slate-700 rounded-2xl"
+            className="text-center py-16 bg-surface-2 border border-dashed border-border rounded-2xl"
           >
-            <BookOpen className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 font-medium mb-1">Sin desafios aun</p>
-            <p className="text-slate-600 text-sm mb-5">Crea el primero para que tus estudiantes puedan jugarlo</p>
+            <BookOpen className="w-12 h-12 text-muted mx-auto mb-3" />
+            <p className="text-muted font-medium mb-1">Sin desafios aun</p>
+            <p className="text-muted text-sm mb-5">Crea el primero para que tus estudiantes puedan jugarlo</p>
             <Link
               href="/profesor/nuevo"
-              className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl px-5 py-2.5 text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-text font-bold rounded-xl px-5 py-2.5 text-sm transition-colors"
             >
               <Plus className="w-4 h-4" />
               Crear primer desafio
@@ -110,28 +112,28 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className={`bg-slate-900 border rounded-xl p-5 transition-colors ${
-                  d.activo ? "border-slate-800 hover:border-slate-700" : "border-slate-800/50 opacity-60"
+                className={`bg-surface-2 border rounded-xl p-5 transition-colors ${
+                  d.activo ? "border-border hover:border-border" : "border-border/50 opacity-60"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="text-white font-bold truncate">{d.titulo}</h3>
+                      <h3 className="text-text font-bold truncate">{d.titulo}</h3>
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                         d.activo
                           ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                          : "bg-slate-700 text-slate-500 border border-slate-600"
+                          : "bg-surface-2 text-muted border border-border"
                       }`}>
                         {d.activo ? "Activo" : "Inactivo"}
                       </span>
                     </div>
 
                     {d.descripcion && (
-                      <p className="text-slate-500 text-sm mb-3 line-clamp-2">{d.descripcion}</p>
+                      <p className="text-muted text-sm mb-3 line-clamp-2">{d.descripcion}</p>
                     )}
 
-                    <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+                    <div className="flex flex-wrap gap-3 text-xs text-muted">
                       <span className="flex items-center gap-1">
                         <Map className="w-3.5 h-3.5" />
                         {d.continente ?? "Global"}
@@ -151,14 +153,14 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
                   <div className="flex items-center gap-2 shrink-0">
                     <Link
                       href={`/profesor/editar/${d.id}`}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                      className="p-2 rounded-lg bg-surface hover:bg-surface-2 text-muted hover:text-text transition-colors"
                       title="Editar"
                     >
                       <Pencil className="w-4 h-4" />
                     </Link>
                     <button
                       onClick={() => setConfirmDelete(d.id)}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-red-900/40 text-slate-400 hover:text-red-400 transition-colors"
+                      className="p-2 rounded-lg bg-surface hover:bg-red-900/40 text-muted hover:text-red-400 transition-colors"
                       title="Eliminar"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -186,24 +188,24 @@ export default function ProfesorDashboard({ desafios, sesion }: Props) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full"
+              className="bg-surface-2 border border-border rounded-2xl p-6 max-w-sm w-full"
             >
               <Trash2 className="w-8 h-8 text-red-400 mb-3" />
-              <h3 className="text-white font-bold text-lg mb-2">Eliminar desafio</h3>
-              <p className="text-slate-400 text-sm mb-5">
+              <h3 className="text-text font-bold text-lg mb-2">Eliminar desafio</h3>
+              <p className="text-muted text-sm mb-5">
                 Esta accion no se puede deshacer. Se eliminaran todos los puntajes asociados.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setConfirmDelete(null)}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-white rounded-xl py-2.5 text-sm font-semibold transition-colors"
+                  className="flex-1 bg-surface hover:bg-surface-2 text-text rounded-xl py-2.5 text-sm font-semibold transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={() => handleDelete(confirmDelete)}
                   disabled={deleting}
-                  className="flex-1 bg-red-500 hover:bg-red-400 disabled:opacity-60 text-white rounded-xl py-2.5 text-sm font-bold transition-colors"
+                  className="flex-1 bg-red-500 hover:bg-red-400 disabled:opacity-60 text-text rounded-xl py-2.5 text-sm font-bold transition-colors"
                 >
                   {deleting ? "Eliminando..." : "Eliminar"}
                 </button>

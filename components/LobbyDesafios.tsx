@@ -27,20 +27,20 @@ export default function LobbyDesafios({ desafios, sesion, onStart }: Props) {
       {/* Bienvenida */}
       <div className="text-center">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-xl shadow-emerald-500/20">
-          <Globe2 className="w-8 h-8 text-white" strokeWidth={1.5} />
+          <Globe2 className="w-8 h-8 text-text" strokeWidth={1.5} />
         </div>
-        <h1 className="text-3xl font-black text-white mb-1">
+        <h1 className="text-3xl font-black text-text mb-1">
           Bienvenido, {sesion.nombre.split(" ")[0]}!
         </h1>
-        <p className="text-slate-400">Elige un desafio para comenzar</p>
+        <p className="text-muted">Elige un desafio para comenzar</p>
       </div>
 
       {/* Lista de desafios */}
       {desafios.length === 0 ? (
-        <div className="text-center py-16 bg-slate-900 border border-dashed border-slate-700 rounded-2xl">
-          <Trophy className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-400 font-medium">No hay desafios disponibles aun</p>
-          <p className="text-slate-600 text-sm mt-1">Espera a que tu profesor cree uno</p>
+        <div className="text-center py-16 bg-surface-2 border border-dashed border-border rounded-2xl">
+          <Trophy className="w-10 h-10 text-muted mx-auto mb-3" />
+          <p className="text-muted font-medium">No hay desafios disponibles aun</p>
+          <p className="text-muted text-sm mt-1">Espera a que tu profesor cree uno</p>
         </div>
       ) : (
         <div className="grid gap-3">
@@ -53,24 +53,24 @@ export default function LobbyDesafios({ desafios, sesion, onStart }: Props) {
               onClick={() => onStart(d)}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-600 rounded-2xl p-5 transition-all group"
+              className="w-full text-left bg-surface-2 hover:bg-surface border border-border hover:border-border rounded-2xl p-5 transition-all group"
             >
               <div className="flex items-center gap-4">
                 {/* Emoji del continente */}
-                <div className="w-12 h-12 bg-slate-800 group-hover:bg-slate-700 rounded-xl flex items-center justify-center text-2xl transition-colors shrink-0">
+                <div className="w-12 h-12 bg-surface group-hover:bg-surface-2 rounded-xl flex items-center justify-center text-2xl transition-colors shrink-0">
                   {d.continente ? (CONTINENTE_EMOJI[d.continente] ?? "🌐") : "🌐"}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-white font-bold text-base truncate mb-1">
+                  <h3 className="text-text font-bold text-base truncate mb-1">
                     {d.titulo}
                   </h3>
                   {d.descripcion && (
-                    <p className="text-slate-500 text-sm line-clamp-1 mb-2">
+                    <p className="text-muted text-sm line-clamp-1 mb-2">
                       {d.descripcion}
                     </p>
                   )}
-                  <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+                  <div className="flex flex-wrap gap-3 text-xs text-muted">
                     <span className="flex items-center gap-1">
                       <Map className="w-3 h-3" />
                       {d.continente ?? "Global"}
@@ -84,7 +84,7 @@ export default function LobbyDesafios({ desafios, sesion, onStart }: Props) {
                       {d.vidas} vidas
                     </span>
                     {d.profesor_nombre && (
-                      <span className="text-slate-600">
+                      <span className="text-muted">
                         por {d.profesor_nombre}
                       </span>
                     )}
@@ -92,11 +92,11 @@ export default function LobbyDesafios({ desafios, sesion, onStart }: Props) {
                 </div>
 
                 <div className="shrink-0 flex items-center gap-2">
-                  <span className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md shadow-emerald-500/20">
+                  <span className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-text text-xs font-bold px-3 py-1.5 rounded-lg shadow-md shadow-emerald-500/20">
                     <Play className="w-3 h-3 fill-white" />
                     Jugar
                   </span>
-                  <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-muted group-hover:text-muted transition-colors" />
                 </div>
               </div>
             </motion.button>
